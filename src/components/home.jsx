@@ -87,7 +87,7 @@ const Home = () => {
                     to="/celeb"
                     className= "relative inline-block px-8 py-3 bg-[#ff6b9e] hover:bg-[#ff4d88] hover:scale-105 transform duration-1000 text-white rounded-full shadow-lg font-bold text-lg fuzzy-bubbles-bold border-2 border-white border-dashed text-center animate-pulse"
                 >
-                    <span className="relative z-10">🎉 Let's Celebrate! INDHU JII🎊</span>
+                    <span className="relative z-10">🎉 Click mee! INDHU JII🎊</span>
                     <span className="absolute -top-3 -right-3 w-8 h-8 bg-yellow-300 rounded-full flex items-center justify-center text-xl">
                         🎂
                     </span>

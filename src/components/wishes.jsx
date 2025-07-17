@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CuteWishButton from './cuteButton';
+
 const BirthdayWishes = () => {
   const [isFlickering, setIsFlickering] = useState(false);
   const [showText, setShowText] = useState(false);
   const [showEffects, setShowEffects] = useState(false);
   const [audioPlaying, setAudioPlaying] = useState(false);
   
-  useEffect(() => {
-    const birthdaySong = new Audio('/birthdaySong.mp3');
-    
-    const handleSongEnd = () => {
-      setAudioPlaying(false);
-    };
+  const birthdaySongRef = useRef(null);
 
-    birthdaySong.addEventListener('ended', handleSongEnd);
+  useEffect(() => {
+    birthdaySongRef.current = new Audio('/birthdaySong.mp3');
+    
+    const handleSongEnd = () => setAudioPlaying(false);
+    birthdaySongRef.current.addEventListener('ended', handleSongEnd);
     
     return () => {
-      birthdaySong.removeEventListener('ended', handleSongEnd);
-      birthdaySong.pause();
+      birthdaySongRef.current.pause();
+      birthdaySongRef.current.currentTime = 0;
+      birthdaySongRef.current.removeEventListener('ended', handleSongEnd);
     };
   }, []);
 
@@ -26,9 +27,7 @@ const BirthdayWishes = () => {
     
     setIsFlickering(true);
     setAudioPlaying(true);
-    
-    const birthdaySong = new Audio('/birthdaySong.mp3');
-    birthdaySong.play().catch(e => console.log("Audio play failed:", e));
+    birthdaySongRef.current.play().catch(e => console.log("Audio play failed:", e));
     
     setTimeout(() => {
       setIsFlickering(false);
@@ -39,29 +38,30 @@ const BirthdayWishes = () => {
 
   return (
     <div className="birthday-container">
-        {showEffects&&<CuteWishButton msg={"For songs and images"} link={"/celeb"}/>}
+      {showEffects && <CuteWishButton msg={"For songs and images"} link={"/celeb"}/>}
+      
       {/* Confetti */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="confetti-container">
         {[...Array(50)].map((_, i) => (
           <div
             key={i}
-            className="absolute bg-pink-400 w-2 h-2 rounded-full animate-confetti"
+            className="confetti"
             style={{
               left: `${Math.random() * 100}%`,
               animationDuration: `${Math.random() * 3 + 2}s`,
               animationDelay: `${Math.random() * 2}s`,
-              transform: `rotate(${Math.random() * 360}deg)`
+              backgroundColor: `hsl(${Math.random() * 360}, 100%, 50%)`
             }}
           />
         ))}
       </div>
 
       {/* Sparkles */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="sparkles-container">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute text-yellow-300 text-xl animate-sparkle"
+            className="sparkle"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -74,22 +74,33 @@ const BirthdayWishes = () => {
         ))}
       </div>
 
-      <h1 className='flicker'>Happy Birthday!</h1>
+      <h1 className="birthday-title">Happy Birthday JI!</h1>
       
       <div 
-        className={`cake ${isFlickering ? 'flicker' : ''} ${showEffects&&'animate-bounce'}`}
+        className={`cake ${isFlickering ? 'flicker' : ''} ${showEffects && 'bounce'}`}
         onClick={handleCakeClick}
       >
-        {showEffects||<p className='text-pink-500 fuzzy-bubbles-bold text-xl'>Click mee</p>}
+        {showEffects || <p className="click-me">Click mee</p>}
         <img 
           src="/bk.png" 
           alt="Birthday Cake"
+          className="cake-image"
         />
       </div>
       
       {showText && (
-        <div className="message">
-          <p className="celebrate">🎉 🎂 🎈</p>
+        <div className="message-container fuzzy-bubbles-regular">
+          <div className="message-box">
+            <p className="personal-message text-blue-500">
+              Heyy Indhuu🤗, Mannny Moreee Happpy returnss of the dayyy🥳, Happpy 20's, the ICSE girl😎, Sleeping beautyy😴💤, Chala kindness😊, Best Humor😎nadhi kuda anuko😌, ekkuva care😊, super FrndsGang, someone said it true "Kundhanapu" bomme nuvvu ✨, konchem allari🙃, Konchem attitude for good😅. Neeku telvadhu raa nuvvu chana manchi ammayivi{"(u r good)"} and andhanga kuda untav😅😌. Keep that smillee up, keep more storiess that brings our smile up tooo, stay connected😎, yeaa I am jealous. 
+            </p>
+            <div className="signature">
+              <p>Once Again Happiest birthday</p>
+              <p>Thala for a reason</p>
+              <p>Telangana pori for a reason</p>
+              <p>Me Being cringgy, sometimes it's okay🤣😅</p>
+            </div>
+          </div>
         </div>
       )}
 
@@ -97,32 +108,16 @@ const BirthdayWishes = () => {
       {showEffects && (
         <>
           <div className="celebration-gif">
-            <img 
-              src="/dance.gif"  // Replace with your celebration GIF
-              alt="Celebration"
-              className="gif-image"
-            />
+            <img src="/dance.gif" alt="Celebration" className="gif-image"/>
           </div>
           <div className="extra-image">
-            <img 
-              src="/danceVideo.gif"  // Replace with your additional image
-              alt="Birthday Wish"
-              className="wish-image"
-            />
+            <img src="/danceVideo.gif" alt="Birthday Wish" className="wish-image"/>
           </div>
           <div className="celebration-gif2">
-            <img 
-              src="/dab.gif"  // Replace with your celebration GIF
-              alt="Celebration"
-              className="gif-image"
-            />
+            <img src="/dab.gif" alt="Celebration" className="gif-image"/>
           </div>
           <div className="extra-image2">
-            <img 
-              src="/dan.gif"  // Replace with your celebration GIF
-              alt="Celebration"
-              className="gif-image"
-            />
+            <img src="/dan.gif" alt="Celebration" className="gif-image"/>
           </div>
         </>
       )}
@@ -137,17 +132,18 @@ const BirthdayWishes = () => {
           min-height: 100vh;
           padding: 20px;
           text-align: center;
-          background: #ffcdea;
+          background: linear-gradient(135deg, #ffcce6, #f9f9f9);
           overflow: hidden;
         }
         
-        h1 {
+        .birthday-title {
           font-size: clamp(2rem, 8vw, 3.5rem);
           font-weight: bold;
           color: #d23369;
           margin-bottom: 2rem;
-          text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
           z-index: 2;
+          padding: 0 20px;
         }
         
         .cake {
@@ -155,75 +151,122 @@ const BirthdayWishes = () => {
           cursor: pointer;
           transition: transform 0.3s ease;
           z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
         
         .cake:hover {
           transform: scale(1.05);
         }
         
-        .cake img {
+        .cake-image {
           max-width: min(300px, 80vw);
           height: auto;
-          border-radius: 8px;   
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(210, 51, 105, 0.3);
         }
         
+        .click-me {
+          color: #d23369;
+          font-family: 'Comic Sans MS', cursive, sans-serif;
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+          font-weight: bold;
+        }
+        
+        .message-container {
+          margin: 2rem auto;
+          width: 90%;
+          max-width: 800px;
+          z-index: 2;
+        }
+        
+        .message-box {
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(8px);
+          border-radius: 20px;
+          padding: 2rem;
+          box-shadow: 0 8px 32px rgba(210, 51, 105, 0.2);
+          border: 2px solid rgba(210, 51, 105, 0.15);
+          animation: fadeIn 1.5s ease-out;
+        }
+        
+        .personal-message {
+          font-size: clamp(1rem, 1.2vw, 1.3rem);
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+          text-align: left;
+        }
+        
+        .signature {
+          font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+          color: #d23369;
+          font-style: italic;
+          text-align: right;
+          line-height: 1.8;
+        }
+        
+        .signature p {
+          margin: 0.5rem 0;
+        }
+        
+        /* Celebration elements */
+        .celebration-gif {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 3;
+          animation: fadeIn 1s ease-out;
+        }
+        
+        .celebration-gif2 {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 3;
+          animation: fadeIn 1s ease-out;
+        }
+        
+        .extra-image {
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          z-index: 3;
+          animation: fadeIn 1s ease-out;
+        }
+        
+        .extra-image2 {
+          position: fixed;
+          bottom: 20px;
+          left: 20px;
+          z-index: 3;
+          animation: fadeIn 1s ease-out;
+        }
+        
+        .gif-image {
+          width: min(150px, 25vw);
+          height: auto;
+          border-radius: 8px;
+          border: 2px solid rgba(255, 255, 255, 0.7);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .wish-image {
+          width: min(200px, 35vw);
+          height: auto;
+          border-radius: 8px;
+          border: 2px solid rgba(255, 255, 255, 0.7);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Animations */
         .flicker {
           animation: flicker 0.3s infinite;
         }
         
-        .message {
-          margin-top: 2rem;
-          font-size: clamp(1.2rem, 4vw, 1.8rem);
-          color: #d23369;
-          animation: fadeIn 1.5s ease-out;
-          z-index: 2;
-        }
-        
-        .celebrate {
-          display: inline-block;
-          margin-top: 1rem;
-          font-size: 1.5em;
+        .bounce {
           animation: bounce 1s infinite;
-        }
-        
-        .celebration-gif {
-          position: absolute;
-          bottom: 20px;
-          right: 20px;
-          z-index: 3;
-          animation: fadeIn 1s ease-out;
-        }
-        .celebration-gif2 {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          z-index: 3;
-          animation: fadeIn 1s ease-out;
-        }
-        .extra-image {
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          z-index: 3;
-          animation: fadeIn 1s ease-out;
-        }
-        .extra-image2 {
-          position: absolute;
-          bottom: 20px;
-          left: 20px;
-          z-index: 3;
-          animation: fadeIn 1s ease-out;
-        }
-        .gif-image {
-          max-width: min(150px, 30vw);
-          height: auto;
-          border-radius: 8px;
-        }
-        
-        .wish-image {
-          max-width: min(200px, 40vw);
-          height: auto;
-          border-radius: 8px;
         }
         
         @keyframes flicker {
@@ -238,7 +281,32 @@ const BirthdayWishes = () => {
         
         @keyframes bounce {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        /* Confetti and sparkles */
+        .confetti-container, .sparkles-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          overflow: hidden;
+          z-index: 1;
+        }
+        
+        .confetti {
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          animation: confettiFall linear infinite;
+        }
+        
+        .sparkle {
+          position: absolute;
+          animation: sparkleTwinkle ease-in-out infinite;
         }
         
         @keyframes confettiFall {
@@ -251,31 +319,32 @@ const BirthdayWishes = () => {
           50% { opacity: 1; transform: scale(1.2); }
         }
         
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-          .cake img {
-            max-width: 70vw;
+          .message-box {
+            padding: 1.5rem;
+            border-radius: 15px;
           }
           
-          .message {
-            margin-top: 1.5rem;
+          .personal-message {
+            font-size: 1rem;
           }
           
-          .celebration-gif {
-            bottom: 10px;
-            right: 10px;
-          }
-          .celebration-gif2 {
-            top: 10px;
-            right: 10px;
+          .signature {
+            font-size: 1.1rem;
           }
           
-          .extra-image {
-            top: 10px;
-            left: 10px;
+          .celebration-gif,
+          .celebration-gif2,
+          .extra-image,
+          .extra-image2 {
+            width: 80px !important;
           }
-            .extra-image2 {
-            bottom: 10px;
-            left: 10px;
+        }
+        
+        @media (min-width: 1200px) {
+          .message-box {
+            padding: 3rem;
           }
         }
       `}</style>

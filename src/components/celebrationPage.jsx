@@ -1,22 +1,32 @@
 import React, { useState, useRef, useEffect } from "react";
 import CuteWishButton from "./cuteButton";
-const photos = [
-  { 
-    image: "/godavari.jpg",
-    audio: "/Adigaa.mp3",
-    caption: "Godavari Memories"
-  },
-  { 
-    image: "/shinall.png",
-    audio: "/Asalelaa.mp3",
-    caption: "Shinall Trip"
-  },
-  { 
-    image: "/mithunam.jpeg",
-    audio: "/Asalelaa.mp3",
-    caption: "Mithunam Celebration"
-  },
 
+const photos = [
+  {
+    image: "/i2.jpg",
+    audio: "/kunbomma.mp3",
+    caption: "Never Ending 👍"
+  },
+  {
+    image: "/i3.jpg",
+    audio: "/prana.mp3",
+    caption: "The Traditional"
+  },
+  {
+    image: "/i4.jpg",
+    audio: "/nana.mp3",
+    caption: "one of my fav - sorry, song bagokapothe"
+  },
+  {
+    image: "/i5.jpg",
+    audio: "/andham.mp3",
+    caption: "😊😊😊"
+  },
+  {
+    image: "/i1.jpg",
+    audio: "/tn.mp3",
+    caption: "Nee Recommendation nuvvu pampina photoKe"
+  },
 ];
 
 const CelebrationBackground = () => {
@@ -28,19 +38,25 @@ const CelebrationBackground = () => {
 
   useEffect(() => {
     setLoaded(true);
-    const timer = setTimeout(() => setLoaded(false), 1000);
+    const timer = setTimeout(() => setLoaded(false), 300);
     return () => clearTimeout(timer);
   }, [currentIndex]);
 
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % (photos.length - 2));
+const goToNext = () => {
+  if (isPlaying !== null) {
+    audioRefs.current[isPlaying].pause();
     setIsPlaying(null);
-  };
+  }
+  setCurrentIndex((prev) => (prev + 1) % (photos.length - 2));
+};
 
-  const goToPrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? photos.length - 3 : prev - 1));
+const goToPrev = () => {
+  if (isPlaying !== null) {
+    audioRefs.current[isPlaying].pause();
     setIsPlaying(null);
-  };
+  }
+  setCurrentIndex((prev) => (prev === 0 ? photos.length - 3 : prev - 1));
+};
 
   const toggleAudio = (index) => {
     if (isPlaying === index) {
@@ -57,43 +73,29 @@ const CelebrationBackground = () => {
   };
 
   return (
-    <>
-    
-    <div className=" flex items-center flex-col relative w-full min-h-screen overflow-hidden bg-gradient-to-b from-pink-300 to-purple-200 p-[20px]">
-             <CuteWishButton msg={"clkk mee, after u enjoy the page"} link={"/wishes"}/>
-     <div className="absolute top-10 left-5 w-16 h-20 sm:w-20 sm:h-24 md:w-24 md:h-32 animate-float">
-        <img src="/ballons.png" alt="Red Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute top-20 right-8 w-14 h-18 sm:w-18 sm:h-22 md:w-20 md:h-28 animate-float delay-100">
-        <img src="/ballons.png" alt="Blue Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute top-20 right-1/2 w-14 h-18 sm:w-18 sm:h-22 md:w-20 md:h-28 animate-float delay-100">
-        <img src="/ballons.png" alt="Blue Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute top-5 left-1/4 w-12 h-16 sm:w-16 sm:h-20 md:w-18 md:h-24 animate-float delay-200">
-        <img src="/ballons.png" alt="Yellow Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute top-5 right-1/4 w-14 h-18 sm:w-18 sm:h-22 md:w-20 md:h-28 animate-float delay-100">
-        <img src="/ballons.png" alt="Blue Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute bottom-10 left-5 w-16 h-20 sm:w-20 sm:h-24 md:w-24 md:h-32 animate-float">
-        <img src="/ballons.png" alt="Red Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute bottom-20 right-8 w-14 h-18 sm:w-18 sm:h-22 md:w-20 md:h-28 animate-float delay-100">
-        <img src="/ballons.png" alt="Blue Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute bottom-20 right-1/2 w-14 h-18 sm:w-18 sm:h-22 md:w-20 md:h-28 animate-float delay-100">
-        <img src="/ballons.png" alt="Blue Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute bottom-5 right-1/4 w-12 h-16 sm:w-16 sm:h-20 md:w-18 md:h-24 animate-float delay-200">
-        <img src="/ballons.png" alt="Yellow Balloon" className="w-full h-full" />
-      </div>
-      <div className="absolute bottom-5 left-1/4 w-14 h-18 sm:w-18 sm:h-22 md:w-20 md:h-28 animate-float delay-100">
-        <img src="/ballons.png" alt="Blue Balloon" className="w-full h-full" />
-      </div>
+    <div className="relative w-full min-h-screen overflow-hidden bg-gradient-to-b from-pink-300 to-purple-200 p-4">
+      {/* Balloons */}
+      {[...Array(10)].map((_, i) => (
+        <div 
+          key={i}
+          className="absolute w-12 h-16 sm:w-16 sm:h-20 md:w-20 md:h-24 animate-float"
+          style={{
+            top: `${i % 2 === 0 ? '10%' : '20%'}`,
+            left: `${10 + (i * 8)}%`,
+            animationDelay: `${i * 100}ms`,
+            transform: `rotate(${Math.random() * 30 - 15}deg)`
+          }}
+        >
+          <img 
+            src="/ballons.png" 
+            alt="Balloon" 
+            className="w-full h-full object-contain"
+          />
+        </div>
+      ))}
 
       {/* Confetti */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(50)].map((_, i) => (
           <div
             key={i}
@@ -109,7 +111,7 @@ const CelebrationBackground = () => {
       </div>
 
       {/* Sparkles */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
@@ -125,85 +127,127 @@ const CelebrationBackground = () => {
           </div>
         ))}
       </div>
-      {/* Photos Section */}
-      <div className="w-screen h-screen flex flex-col justify-center items-center z-10 px-4 py-8 relative">
-        <div className="flex w-full items-center justify-center relative">
+
+      {/* Main Content */}
+      <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-center px-4 py-8">
+        {/* Title */}
+        <div className="text-center mb-6 md:mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-teal-600 bg-white/90 px-6 py-2 rounded-full shadow-lg">
+            HappY BirthDay
+          </h1>
+          <h2 className="text-2xl md:text-3xl mt-2 text-teal-600 bg-white/90 px-6 py-2 rounded-full shadow-lg">
+            T Indhuu Reddy Garuu
+          </h2>
+        </div>
+
+        {/* Photo Gallery */}
+        <div className="w-full max-w-6xl flex items-center justify-center relative">
+          {/* Navigation Buttons */}
           <button
             onClick={goToPrev}
-            className="absolute left-2 md:left-4 z-20 bg-white/80 hover:bg-white text-purple-600 font-bold rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg transition-all"
+            className="absolute left-0 md:-left-4 z-20 bg-white/90 hover:bg-white text-purple-600 font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all transform hover:scale-110"
           >
             ❮
           </button>
 
-          <div className={`flex flex-wrap w-full md:w-[80%] items-center justify-around gap-4 md:gap-8 transition-all duration-300 mt-15 ${loaded ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-            {visiblePhotos.map((photo, index) => (
-              <div
-                key={`${currentIndex}-${index}`}
-                className="relative group bg-white border-8 border-white rounded-[20px] overflow-hidden shadow-2xl shadow-blue-300 flex-shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-purple-400"
-                style={{
-                  transform: `rotate(${Math.random() * 10 - 5}deg)`,
-                  width: 'clamp(180px, 30vw, 280px)',
-                  height: 'clamp(220px, 35vh, 350px)'
-                }}
-              >
-                {/* Hidden audio element */}
-                <audio 
-                  ref={el => audioRefs.current[index] = el} 
-                  src={photo.audio} 
-                  onEnded={() => setIsPlaying(null)}
-                />
-                
-                {/* Image with loading animation */}
-                <img
-                  src={photo.image}
-                  alt={photo.caption}
-                  className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:brightness-110"
-                />
-                
-                {/* Audio button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleAudio(index);
+          <div className={`flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 w-full transition-opacity duration-300 ${loaded ? 'opacity-70' : 'opacity-100'}`}>
+            {visiblePhotos.map((photo, index) => {
+              // Create a temporary image to check dimensions
+              const img = new Image();
+              img.src = photo.image;
+              const isPortrait = img.height > img.width;
+              
+              return (
+                <div
+                  key={`${currentIndex}-${index}`}
+                  className={`relative group bg-white border-4 md:border-8 border-white rounded-xl md:rounded-2xl overflow-hidden shadow-xl flex ${
+                    isPortrait ? 'flex-col portrait-aspect' : 'flex-row landscape-aspect'
+                  }`}
+                  style={{
+                    width: 'clamp(250px, 80vw, 350px)',
+                    height: isPortrait ? 'clamp(350px, 70vh, 450px)' : 'clamp(250px, 50vh, 350px)',
+                    flex: '0 0 auto'
                   }}
-                  className={`absolute top-2 right-2 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all ${isPlaying === index ? 'bg-purple-600 text-white' : 'bg-white/90 text-purple-600 hover:bg-white'}`}
                 >
-                  {isPlaying === index ? '⏸️' : '▶️'}
-                </button>
-                
-                {/* Caption */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-4">
-                  <p className="text-white font-bold text-sm md:text-base text-center">
-                    {photo.caption}
-                  </p>
-                  <p className="text-white/80 text-xs md:text-sm text-center">
-                    {currentIndex + index + 1}/{photos.length}
-                  </p>
+                  {/* Hidden audio element */}
+                  <audio
+                    ref={el => audioRefs.current[index] = el}
+                    src={photo.audio}
+                    onEnded={() => setIsPlaying(null)}
+                  />
+
+                  {/* Image container with proper aspect ratio */}
+                  <div className={`relative ${
+                    isPortrait ? 'w-full h-full' : 'w-full h-full'
+                  } overflow-hidden`}>
+                    <img
+                      src={photo.image}
+                      alt={photo.caption}
+                      className={`absolute inset-0 ${
+                        isPortrait ? 'w-full h-full object-cover' : 'w-full h-full object-contain'
+                      } transition-transform duration-500 group-hover:scale-105`}
+                      style={{
+                        objectPosition: 'center'
+                      }}
+                    />
+                  </div>
+
+                  {/* Audio button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleAudio(index);
+                    }}
+                    className={`absolute top-2 right-2 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all ${
+                      isPlaying === index ? 'bg-purple-600 text-white' : 'bg-white/90 text-purple-600 hover:bg-white'
+                    } shadow-md`}
+                  >
+                    {isPlaying === index ? '⏸️' : '▶️'}
+                  </button>
+
+                  {/* Caption */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-center">
+                    <p className="text-white font-bold text-sm md:text-base">
+                      {photo.caption}
+                    </p>
+                    <p className="text-white/80 text-xs md:text-sm mt-1">
+                      {currentIndex + index + 1}/{photos.length}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <button
             onClick={goToNext}
-            className="absolute right-2 md:right-4 z-20 bg-white/80 hover:bg-white text-purple-600 font-bold rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg transition-all"
+            className="absolute right-0 md:-right-4 z-20 bg-white/90 hover:bg-white text-purple-600 font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all transform hover:scale-110"
           >
             ❯
           </button>
         </div>
 
         {/* Mobile indicators */}
-        <div className="flex gap-2 mt-4 md:hidden">
+        <div className="flex gap-2 mt-6 md:hidden">
           {photos.map((_, i) => (
-            <div 
+            <div
               key={i}
-              className={`w-2 h-2 rounded-full ${i >= currentIndex && i < currentIndex + 3 ? 'bg-white' : 'bg-white/30'}`}
+              className={`w-3 h-3 rounded-full transition-all ${
+                i >= currentIndex && i < currentIndex + 3 ? 'bg-teal-500' : 'bg-white/50'
+              }`}
             />
           ))}
         </div>
+
+        {/* Navigation Button */}
+        <div className="mt-8 md:mt-12">
+          <CuteWishButton 
+            msg={"Click me after enjoying this page's music"} 
+            link={"/wishes"} 
+          />
+        </div>
       </div>
     </div>
-    </>
   );
 };
 

@@ -8,7 +8,7 @@ const CuteWishButton = ({msg,link}) => {
       className="z-10 relative inline-block px-8 py-4 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 
                 text-white font-bold animate-bounce"
     >
-      <span className="relative z-10 flex items-center justify-center gap-3 text-center">
+      <span className="relative z-10 flex items-center justify-center gap-3 text-center text-sm sm:text-lg">
         {msg}
         <span className="text-2xl">🎂</span> 
       </span>
