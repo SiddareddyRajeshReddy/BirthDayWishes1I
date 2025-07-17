@@ -4,7 +4,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './components/home'
 import CelebrationBackground from './components/celebrationPage'
-
+import BirthdayWishes from './components/wishes'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -13,7 +13,11 @@ const router = createBrowserRouter([
   {
     path: "celeb",
     element: <CelebrationBackground/>
-  }
+  },
+  {
+    path: "wishes",
+    element: <BirthdayWishes/>
+ }
 ])
 
 createRoot(document.getElementById('root')).render(
